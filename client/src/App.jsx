@@ -20,7 +20,6 @@ function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chatcontainer" element={<ChatContainer />} />
-  
           <Route path="/auth" element={<AuthModal />} />
         </Routes>
       </BrowserRouter>
