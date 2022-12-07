@@ -1,5 +1,8 @@
-import { sendSignInLinkToEmail } from "firebase/auth";
 import React, { useState } from "react";
+import { sendSignInLinkToEmail } from "firebase/auth";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import "../styles/AuthModal.css";
 
@@ -8,6 +11,9 @@ const AuthModal1 = ({ setShowModal, setIsSignUp, isSignUp }) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [error, setError] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  let navigate = useNavigate();
 
   console.log(email, password, confirmPassword);
 
@@ -16,14 +22,32 @@ const AuthModal1 = ({ setShowModal, setIsSignUp, isSignUp }) => {
     setIsSignUp(true);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       if (isSignUp && password !== confirmPassword) {
         setError("Password and confirm password needs to match");
+
+        return;
+      } else {
+        const response = await axios.post(
+          `http://localhost:8000/${isSignUp ? "signup" : "login"}`,
+          {
+            email,
+            password,
+          }
+        );
+
+        // setCookie("Email", response.data.email);
+        setCookie("UserId", response.data.userId);
+        setCookie("AuthToken", response.data.token);
+
+        const success = response.status === 201;
+
+        if (success && isSignUp) navigate("/onboarding");
+        if (success && !isSignUp) navigate("/dashboard");
       }
-      console.log("Push info to database");
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +59,7 @@ const AuthModal1 = ({ setShowModal, setIsSignUp, isSignUp }) => {
         <span className="closeIcon">&otimes;</span>
       </div>
       <div className="text-area">
-        <h4 className="h4">{isSignUp ? "CREATE ACCOUNT" : "LOG IN"}</h4>
+        <h4 className="h4">{isSignUp ? "CREATE AN ACCOUNT" : "LOG IN"}</h4>
       </div>
       <form className="form-signup" onSubmit={handleSubmit}>
         <input
@@ -64,8 +88,8 @@ const AuthModal1 = ({ setShowModal, setIsSignUp, isSignUp }) => {
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
         )}
-
-        <input className="submit-button" type="submit" />
+        {isSignUp ? <button>Sign Up</button> : <button>Log In</button>}
+        
         <p>{error}</p>
       </form>
     </div>

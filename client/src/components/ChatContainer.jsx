@@ -8,8 +8,8 @@ const ChatContainer = () => {
   return (
     <div className="chat-wrapper">
       <Nav />
-      <div className="chat-headline">
-             <h1>Chats</h1>
+      <div className="intro-text">
+             {/* <h2>Chat</h2> */}
         <div className="chat-container">
             <div className="chat-profilesContainer">
             <ChatsHeader  /> 
