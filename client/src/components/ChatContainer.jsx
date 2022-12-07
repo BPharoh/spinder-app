@@ -6,9 +6,9 @@ import ChatsDisplay from "./ChatsDisplay";
 
 const ChatContainer = () => {
   return (
-    <div className="wrapper">
+    <div className="chat-wrapper">
       <Nav />
-      <div className="intro-text">
+      <div className="chat-headline">
              <h1>Chats</h1>
         <div className="chat-container">
             <div className="chat-profilesContainer">
@@ -21,7 +21,7 @@ const ChatContainer = () => {
             <ChatsDisplay />
             </div>
             <div className="chat-displayContainer">
-            Lorem ipsum 
+            <h2>Chat Display </h2>
             </div>
         </div>
       </div>
